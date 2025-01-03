@@ -1,1 +1,39 @@
-aW1wb3J0IFJlYWN0LCB7IHVzZVN0YXRlIH0gZnJvbSAncmVhY3QnOwppbXBvcnQgeyBDYXJkLCBDYXJkSGVhZGVyLCBDYXJkVGl0bGUsIENhcmRDb250ZW50IH0gZnJvbSAnQC9jb21wb25lbnRzL3VpL2NhcmQnOwppbXBvcnQgeyBTdGFyLCBTZWFyY2ggfSBmcm9tICdsdWNpZGUtcmVhY3QnOwoKLy8gRmlsdGVyIHR5cGVzCmludGVyZmFjZSBGaWx0ZXJzIHsKICByYXRpbmc6IG51bWJlcjsKICBwcmljZVJhbmdlOiBzdHJpbmc7CiAgY3Vpc2luZTogc3RyaW5nOwp9
+import React, { useState } from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Star, Search } from 'lucide-react';
+import { Restaurant, Filters } from './types';
+
+const RestaurantListing = () => {
+  const allRestaurants = [
+    {
+      name: "Boho Café",
+      address: "10 Rue EL Yamama, Rabat 10000, Morocco",
+      image: "/api/placeholder/800/400?text=Bright+Modern+Café",
+      rating: 4.7,
+      priceRange: "$$",
+      cuisine: "Café",
+      review: {
+        text: "Loved this brunch place! Lots of healthy options.",
+        author: "kapil gupta",
+        rating: 5
+      },
+      hours: "9:00 AM – 9:00 PM",
+      phone: "0690-036170",
+      location: { lat: 34.0151034, lng: -6.8369946 }
+    }
+  ];
+
+  const [filters, setFilters] = useState<Filters>({
+    rating: 0,
+    priceRange: 'all',
+    cuisine: 'all'
+  });
+
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  return (
+    <div>Restaurant Listing Component</div>
+  );
+};
+
+export default RestaurantListing;
