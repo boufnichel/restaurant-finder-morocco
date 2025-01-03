@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Star, Search, Filter } from 'lucide-react';
+import { Card, Badge, Select, TextInput, Button } from '@rewind-ui/core';
+import { StarIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 interface Restaurant {
   name: string;
@@ -67,11 +68,9 @@ const RestaurantListing = () => {
     priceRange: 'all'
   });
 
-  // Get unique cuisines and price ranges for filters
   const cuisines = ['all', ...new Set(restaurantsData.map(r => r.cuisine))];
   const priceRanges = ['all', ...new Set(restaurantsData.map(r => r.priceRange))];
 
-  // Filter restaurants based on all criteria
   const filteredRestaurants = restaurantsData.filter(restaurant => {
     const matchesSearch = restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          restaurant.cuisine.toLowerCase().includes(searchQuery.toLowerCase());
@@ -84,101 +83,110 @@ const RestaurantListing = () => {
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
-      <Star
+      <StarIcon
         key={index}
-        size={20}
-        fill={index < Math.floor(rating) ? '#FFD700' : 'none'}
-        stroke={index < Math.floor(rating) ? '#FFD700' : '#CBD5E0'}
-        className={`transition-colors ${index < rating ? 'text-yellow-400' : 'text-gray-300'}`}
+        className={`h-5 w-5 ${index < Math.floor(rating) ? 'text-yellow-400' : 'text-gray-300'}`}
       />
     ));
   };
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-4xl font-bold text-center mb-12">
+      <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
         Top Restaurants in Rabat
       </h1>
       
-      <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-        {/* Search Bar */}
-        <div className="relative mb-6">
-          <input
-            type="text"
-            placeholder="Search restaurants or cuisines..."
-            className="w-full p-4 pl-12 text-lg border-2 border-gray-200 rounded-xl shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-        </div>
+      <Card className="mb-8">
+        <Card.Header>
+          <div className="flex items-center space-x-2">
+            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+            <span className="text-lg font-semibold">Search & Filters</span>
+          </div>
+        </Card.Header>
+        <Card.Body>
+          {/* Search Bar */}
+          <div className="mb-6">
+            <TextInput
+              placeholder="Search restaurants or cuisines..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              size="lg"
+              radius="lg"
+              leftIcon={<MagnifyingGlassIcon className="h-5 w-5" />}
+            />
+          </div>
 
-        {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Rating Filter */}
-          <select
-            className="p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none"
-            value={filters.minRating}
-            onChange={(e) => setFilters({ ...filters, minRating: Number(e.target.value) })}
-          >
-            <option value={0}>All Ratings</option>
-            <option value={4.5}>4.5+ ★</option>
-            <option value={4.0}>4.0+ ★</option>
-            <option value={3.5}>3.5+ ★</option>
-          </select>
+          {/* Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Select
+              value={filters.minRating.toString()}
+              onChange={(e) => setFilters({ ...filters, minRating: Number(e.target.value) })}
+              size="lg"
+              radius="lg"
+            >
+              <option value="0">All Ratings</option>
+              <option value="4.5">4.5+ ★</option>
+              <option value="4.0">4.0+ ★</option>
+              <option value="3.5">3.5+ ★</option>
+            </Select>
 
-          {/* Cuisine Filter */}
-          <select
-            className="p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none"
-            value={filters.cuisine}
-            onChange={(e) => setFilters({ ...filters, cuisine: e.target.value })}
-          >
-            {cuisines.map(cuisine => (
-              <option key={cuisine} value={cuisine}>
-                {cuisine === 'all' ? 'All Cuisines' : cuisine}
-              </option>
-            ))}
-          </select>
+            <Select
+              value={filters.cuisine}
+              onChange={(e) => setFilters({ ...filters, cuisine: e.target.value })}
+              size="lg"
+              radius="lg"
+            >
+              {cuisines.map(cuisine => (
+                <option key={cuisine} value={cuisine}>
+                  {cuisine === 'all' ? 'All Cuisines' : cuisine}
+                </option>
+              ))}
+            </Select>
 
-          {/* Price Range Filter */}
-          <select
-            className="p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none"
-            value={filters.priceRange}
-            onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-          >
-            {priceRanges.map(price => (
-              <option key={price} value={price}>
-                {price === 'all' ? 'All Prices' : price}
-              </option>
-            ))}
-          </select>
-        </div>
+            <Select
+              value={filters.priceRange}
+              onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
+              size="lg"
+              radius="lg"
+            >
+              {priceRanges.map(price => (
+                <option key={price} value={price}>
+                  {price === 'all' ? 'All Prices' : price}
+                </option>
+              ))}
+            </Select>
+          </div>
+        </Card.Body>
+      </Card>
+
+      <div className="text-gray-600 mb-6 flex items-center justify-between">
+        <span>Found {filteredRestaurants.length} restaurants</span>
+        <Button
+          color="gray"
+          onClick={() => setFilters({ minRating: 0, cuisine: 'all', priceRange: 'all' })}
+        >
+          Clear Filters
+        </Button>
       </div>
 
-      {/* Results Count */}
-      <div className="text-gray-600 mb-6">
-        Found {filteredRestaurants.length} restaurants
-      </div>
-
-      {/* Restaurant Cards */}
       <div className="grid grid-cols-1 gap-6">
         {filteredRestaurants.map((restaurant, index) => (
-          <div 
-            key={index}
-            className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-          >
-            <div className="relative h-48 bg-gray-200">
+          <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div className="relative h-48">
               <img 
                 src={restaurant.image}
                 alt={restaurant.name}
                 className="w-full h-full object-cover"
               />
-              <span className="absolute top-4 right-4 px-3 py-1 bg-white rounded-full text-gray-700 font-semibold shadow-md">
+              <Badge
+                color="white"
+                className="absolute top-4 right-4 shadow-lg"
+              >
                 {restaurant.priceRange}
-              </span>
+              </Badge>
             </div>
 
-            <div className="p-6">
+            <Card.Body>
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-2xl font-bold mb-2">{restaurant.name}</h2>
@@ -191,17 +199,18 @@ const RestaurantListing = () => {
                 </div>
               </div>
               
-              <div className="flex items-center gap-2 mb-4">
-                <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium">
-                  {restaurant.cuisine}
-                </span>
-              </div>
+              <Badge
+                color="blue"
+                className="mb-4"
+              >
+                {restaurant.cuisine}
+              </Badge>
               
               <p className="text-gray-600 leading-relaxed">
                 {restaurant.description}
               </p>
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         ))}
       </div>
     </div>
