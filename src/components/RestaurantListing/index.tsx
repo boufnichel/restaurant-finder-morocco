@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Card, Badge, Select, TextInput, Button } from '@rewind-ui/core';
-import { StarIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { Input, Button, Card, Select } from '@rewind-ui/core';
+import { MagnifyingGlassIcon, StarIcon } from '@heroicons/react/24/solid';
 
 interface Restaurant {
   name: string;
@@ -96,23 +96,22 @@ const RestaurantListing = () => {
         Top Restaurants in Rabat
       </h1>
       
-      <Card className="mb-8">
-        <Card.Header>
-          <div className="flex items-center space-x-2">
+      <Card>
+        <div className="p-6">
+          <div className="flex items-center space-x-2 mb-6">
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
             <span className="text-lg font-semibold">Search & Filters</span>
           </div>
-        </Card.Header>
-        <Card.Body>
+
           {/* Search Bar */}
           <div className="mb-6">
-            <TextInput
+            <Input
               placeholder="Search restaurants or cuisines..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               size="lg"
-              radius="lg"
-              leftIcon={<MagnifyingGlassIcon className="h-5 w-5" />}
+              tone="solid"
+              icon={<MagnifyingGlassIcon />}
             />
           </div>
 
@@ -122,7 +121,7 @@ const RestaurantListing = () => {
               value={filters.minRating.toString()}
               onChange={(e) => setFilters({ ...filters, minRating: Number(e.target.value) })}
               size="lg"
-              radius="lg"
+              tone="solid"
             >
               <option value="0">All Ratings</option>
               <option value="4.5">4.5+ ★</option>
@@ -134,7 +133,7 @@ const RestaurantListing = () => {
               value={filters.cuisine}
               onChange={(e) => setFilters({ ...filters, cuisine: e.target.value })}
               size="lg"
-              radius="lg"
+              tone="solid"
             >
               {cuisines.map(cuisine => (
                 <option key={cuisine} value={cuisine}>
@@ -147,7 +146,7 @@ const RestaurantListing = () => {
               value={filters.priceRange}
               onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
               size="lg"
-              radius="lg"
+              tone="solid"
             >
               {priceRanges.map(price => (
                 <option key={price} value={price}>
@@ -156,14 +155,15 @@ const RestaurantListing = () => {
               ))}
             </Select>
           </div>
-        </Card.Body>
+        </div>
       </Card>
 
-      <div className="text-gray-600 mb-6 flex items-center justify-between">
+      <div className="text-gray-600 mb-6 flex items-center justify-between mt-8">
         <span>Found {filteredRestaurants.length} restaurants</span>
         <Button
-          color="gray"
+          color="dark"
           onClick={() => setFilters({ minRating: 0, cuisine: 'all', priceRange: 'all' })}
+          size="lg"
         >
           Clear Filters
         </Button>
@@ -171,22 +171,19 @@ const RestaurantListing = () => {
 
       <div className="grid grid-cols-1 gap-6">
         {filteredRestaurants.map((restaurant, index) => (
-          <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <Card key={index} className="overflow-hidden">
             <div className="relative h-48">
               <img 
                 src={restaurant.image}
                 alt={restaurant.name}
                 className="w-full h-full object-cover"
               />
-              <Badge
-                color="white"
-                className="absolute top-4 right-4 shadow-lg"
-              >
+              <span className="absolute top-4 right-4 px-3 py-1 bg-white rounded-full text-gray-700 font-semibold shadow-lg">
                 {restaurant.priceRange}
-              </Badge>
+              </span>
             </div>
 
-            <Card.Body>
+            <div className="p-6">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-2xl font-bold mb-2">{restaurant.name}</h2>
@@ -199,17 +196,14 @@ const RestaurantListing = () => {
                 </div>
               </div>
               
-              <Badge
-                color="blue"
-                className="mb-4"
-              >
+              <span className="inline-block px-3 py-1 bg-blue-50 text-blue-600 rounded-full font-medium mb-4">
                 {restaurant.cuisine}
-              </Badge>
+              </span>
               
               <p className="text-gray-600 leading-relaxed">
                 {restaurant.description}
               </p>
-            </Card.Body>
+            </div>
           </Card>
         ))}
       </div>
